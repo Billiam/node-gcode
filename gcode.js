@@ -3,6 +3,7 @@ var util = require('util');
 var parser = require('./parser');
 var fs = require('fs');
 var byline = require('byline');
+var Buffer = require('node:buffer').Buffer;
 
 // Strips spaces out of all incoming g-code except for comments
 function GCodeScrubber() {
@@ -61,7 +62,7 @@ function GCodeParser(options) {
 util.inherits(GCodeParser, stream.Transform);
 
 GCodeParser.prototype._transform = function (object, encoding, done) {
-	if(encoding === 'buffer') {
+	if(Buffer.isBuffer(object)) {
 		object = object.toString('utf8')
 	}
 	this.push(parser.parse(object));
