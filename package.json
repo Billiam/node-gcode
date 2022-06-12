@@ -12,8 +12,12 @@
     "gcode",
     "cnc"
   ],
+  "scripts": {
+    "test": "mocha test",
+    "build": "pegjs -o parser.js parser.pegjs"
+  },
   "dependencies": {
-    "byline": "^4.1.1"
+    "byline": "^5.0.0"
   },
   "engines": {
     "node": "*"
@@ -21,6 +25,6 @@
   "devDependencies": {
     "chai": "*",
     "mocha": "*",
-    "npm-release": "0.0.4-3"
+    "pegjs": "^0.10.0"
   }
 }
