@@ -1,22 +1,22 @@
 {
-   buildTree = function(first, rest) {
-      if(rest.length == 0) {
-          return first;
-      } else { 
-          var next = rest.shift();
-          var operator = next[0]
-          var term = next[1]
-          return {left: first, right: buildTree(term, rest), op: operator};
-      }
-   }
+  function buildTree(first, rest) {
+    if(rest.length == 0) {
+      return first;
+    } else {
+      var next = rest.shift();
+      var operator = next[0]
+      var term = next[1]
+      return {left: first, right: buildTree(term, rest), op: operator};
+    }
+  }
 }
 
 start
   = line
 
-line 
+line
   = num:line_number? words:word* {
-      return {'N':num, 'words':words}
+  return {'N':num, 'words':words}
 }
 
 word = word:letter value:real_value { return [word, value]; }
@@ -24,20 +24,20 @@ word = word:letter value:real_value { return [word, value]; }
 line_number
   = "N" integer
 
-real_value 
+real_value
   = factor1
 
 integer
   = [0-9]+ { return parseInt(text()); }
 
 number
-  = [\+\-]?[0-9]+([\.][0-9]+)? { return parseFloat(text()); }
-    
-expression
-  = "[" expr:factor4 "]" {return expr; }
+  = [\+\-]?([0-9]+[\.]?[0-9]* / [\.][0-9]+) { return parseFloat(text()); }
 
-atan_factor = "ATAN" left:expression "/" right:expression { 
-    return {'op':"ATAN", 'left':left, 'right':right};
+  expression
+    = "[" expr:factor4 "]" {return expr; }
+
+atan_factor = "ATAN" left:expression "/" right:expression {
+  return {'op':"ATAN", 'left':left, 'right':right};
 }
 
 unary_factor = op:unary_op expr:expression {return {'op':op, 'right':expr}}
@@ -52,17 +52,17 @@ factor1
   / param_value
 
 factor2
-  = first:factor1 rest:(group1_op factor1)* { 
-        return buildTree(first, rest);
-    }
+  = first:factor1 rest:(group1_op factor1)* {
+  return buildTree(first, rest);
+}
 factor3
   = first:factor2 rest:(group2_op factor2)* {
-      return buildTree(first, rest);
-    }
+  return buildTree(first, rest);
+}
 factor4
   = first:factor3 rest:(group3_op factor3)* {
-      return buildTree(first, rest);
-    }
+  return buildTree(first, rest);
+}
 
 group1_op = "**"
 group2_op = "*" / "/" / "MOD"
